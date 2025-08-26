@@ -9,20 +9,20 @@ A clean, practical Laravel app for managing a directory of recycling facilities.
 - Laravel Breeze (auth)
 
 ---
-
-## Quick start
-
 1) Requirements
-- PHP 8.2+, Composer
-- Node 18+
-- MySQL 8+ (or MariaDB)
+- PHP 8.2+, Composer (for Laravel)
+- Node Js (for Frontend Components)
+- MySQL 
 
 2) Setup
+   First copy the example of env file to .env file
 ```bash
+#First copy the example of env file to .env file
 cp .env.example .env
 php artisan key:generate
 
 # In .env, set your DB connection
+
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
@@ -30,17 +30,14 @@ DB_DATABASE=recycling_facility_directory
 DB_USERNAME=your_user
 DB_PASSWORD=your_password
 
+#use composer install get the Dependencies and npm for installing dependencies and building the app
+
 composer install
 npm install
 npm run build
 php artisan migrate
 ```
 
-3) Run
-```bash
-php artisan serve
-# → http://127.0.0.1:8000
-```
 
 4) Auth
 - Breeze is installed. Visit `/register` to create an account or `/login` to sign in.
@@ -88,70 +85,4 @@ Eloquent
 - `Facility::getFullAddressAttribute()` exposes a `full_address` string for display/export/maps
 
 ---
-
-## How search, filter, sort, and export work
-
-Controller: `app/Http/Controllers/FacilityController.php`
-- Request params
-  - `q`: search (business_name OR city OR material name using `whereHas`)
-  - `material_id`: filter by material
-  - `sort`: `updated_desc` | `updated_asc`
-- Pagination: 10 per page, `withQueryString()` to keep filters while paging
-- CSV export: reuses the same query builder as index and streams rows with headers:
-  - Business Name, Last Updated, Address, Materials Accepted
-
----
-
-## UI overview
-
-Views (Blade)
-- Layout for CRUD pages: `resources/views/layouts/main.blade.php`
-- Index: `resources/views/facilities/index.blade.php`
-- Create/Edit form (shared partial): `resources/views/facilities/_form.blade.php`
-- Show (with Google Maps embed): `resources/views/facilities/show.blade.php`
-
-Styling
-- Bootstrap 5 for tables/forms (Paginator set to Bootstrap in `AppServiceProvider`)
-
-Routes
-- `GET /` → facilities index (auth)
-- `resource('facilities', ...)`
-- `GET /facilities-export` → CSV (auth)
-- Breeze auth routes in `routes/auth.php`
-
----
-
-## Development
-
-Helpful commands
-```bash
-# install & build
-composer install
-npm install && npm run build
-
-# env & key
-cp .env.example .env && php artisan key:generate
-
-# database
-php artisan migrate
-
-# serve
-php artisan serve
-
-# dev assets (hot reload)
-npm run dev
-```
-
-Testing data
-- The project includes seeders/migrations. If you want to reseed with your own data, create seeders and run `php artisan db:seed`. (The sample dataset has already been inserted as per the task.)
-
----
-
-## Notes & possible improvements
-
-- Add roles/permissions (e.g., admin-only CSV)
-- Server-side column sorting for more fields
-- Bulk import/export (CSV/Excel)
-- Geocoding for addresses and map markers
-- Feature tests with Pest
 
